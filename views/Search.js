@@ -1,10 +1,11 @@
 import React, {Component} from 'react';
 import {StyleSheet, Animated, StatusBar, ScrollView,FlatList} from 'react-native';
 import SafeAreaView from 'react-native-safe-area-view';
-import Header from './../components/Header';
-import RestaurantsList from './../components/RestaurantsList';
+import Header from '../components/Header';
+import RestaurantsList from '../components/RestaurantsList';
+import {SearchInput} from './../components/SearchInput';
 
-export default class Index extends Component {
+export default class Search extends Component {
   static navigationOptions = {
     headerShown: false,
     headerMode: 'none',
@@ -42,10 +43,14 @@ export default class Index extends Component {
     this.state.scrollOffset.setValue(offset);
   };
 
+  _updateMasterState = (attrName, value) => {
+    this.setState({[attrName]: value});
+  };
+
   render() {
     return (
       <SafeAreaView style={{backgroundColor: '#fff'}}>
-        <Header scrollOffset={this.state.scrollOffset} title={'Waitrest'} />
+        <Header scrollOffset={this.state.scrollOffset} title={'Zoeken'} />
 
         <ScrollView
           style={styles.container}
@@ -57,7 +62,18 @@ export default class Index extends Component {
             barStyle="dark-content"
             translucent={false}
           />
+   
 
+                <SearchInput
+                attrName="search"
+                title="Zoeken"
+                value={this.state.search}
+                multi={false}
+                length={14}
+                autoFocus={true}
+                height={50}
+                updateMasterState={this._updateMasterState}
+              />
           <FlatList
             data={this.state.restaurants}
             style={{marginBottom:80}}

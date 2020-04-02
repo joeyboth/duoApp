@@ -11,7 +11,7 @@ import Landing from './views/Index';
 import Login from './views/Index';
 import Register from './views/Index';
 import Home from './views/Index';
-import Search from './views/Index';
+import Search from './views/Search';
 import Orders from './views/Index';
 import Settings from './views/Index';
 
