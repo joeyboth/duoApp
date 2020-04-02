@@ -6,23 +6,25 @@ import {
   TouchableOpacity,
   Dimensions,
   Image,
+  AsyncStorage
 } from 'react-native';
 import StarRating from 'react-native-star-rating';
 var screen = Dimensions.get('window');
 import Icon from 'react-native-vector-icons/Feather';
 
-export default class RestaurantsList extends Component {
+class RestaurantsList extends React.Component {
 
   render() {
+   
+     
     return (
-      <TouchableOpacity
-        onPress={() => {
-          AsyncStorage.setItem(
-            'selectedRestaurantId',
-            JSON.stringify(this.props.id),
-          );
-          this.props.navigation.navigate('Restaurant');
-        }}>
+      <View>
+       <TouchableOpacity  onPress={() => {
+                            AsyncStorage.setItem(this.props.navigationId, JSON.stringify(this.props.id));
+                            this.props.navigation.navigate(this.props.navigationName, { name: 'Detail' });
+
+
+                        }}>
         <View
           style={{
             position: 'absolute',
@@ -71,7 +73,7 @@ export default class RestaurantsList extends Component {
             </Text>
           </View>
         </View>
-      </TouchableOpacity>
+        </TouchableOpacity></View>
     );
   }
 }
@@ -124,3 +126,6 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   }
 });
+
+
+export default RestaurantsList;

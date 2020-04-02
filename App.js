@@ -15,6 +15,8 @@ import Search from './views/Search';
 import Orders from './views/Index';
 import Settings from './views/Index';
 
+import Detail from './views/Detail';
+
 class AuthLoadingScreen extends React.Component {
 
   constructor(props) {
@@ -201,6 +203,7 @@ function HomeStack() {
     }}>
 
       <Stack.Screen name="Home" component={Home} />
+      <Stack.Screen name="Detail" component={Detail} />
 
     </Stack.Navigator>
   );
@@ -211,7 +214,8 @@ function SearchStack() {
     <Stack.Navigator headerMode="none" screenOptions={{
       cardStyle: { backgroundColor: '#fff' }
     }}>
-      <Stack.Screen name="Explore" component={Search} />
+      <Stack.Screen name="Search" component={Search} />
+      <Stack.Screen name="Detail" component={Detail} />
     </Stack.Navigator>
   );
 }

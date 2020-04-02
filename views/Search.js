@@ -80,12 +80,15 @@ export default class Search extends Component {
             keyExtractor={(x, i) => i}
             renderItem={({item}) => (
               <RestaurantsList
-                id={item.id}
-                image={item.image}
-                title={item.title}
-                category={item.category}
-                time={item.time}
-                rate={item.rate}
+              id={item.id}
+              image={item.image}
+              title={item.title}
+              category={item.category}
+              time={item.time}
+              rate={item.rate}
+              navigationName={'Detail'}
+              navigationId={'selectedRestaurantId'}
+              navigation={this.props.navigation}
               />
             )}
           />

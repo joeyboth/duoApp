@@ -70,6 +70,9 @@ export default class Index extends Component {
                 category={item.category}
                 time={item.time}
                 rate={item.rate}
+                navigationName={'Detail'}
+                navigationId={'selectedRestaurantId'}
+                navigation={this.props.navigation}
               />
             )}
           />
