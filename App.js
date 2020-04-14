@@ -6,66 +6,61 @@ import {
   StatusBar,
   StyleSheet,
   View,
+  Linking,
   Image,
 } from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
-import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
 import {createStackNavigator} from '@react-navigation/stack';
 import 'react-native-gesture-handler';
-import AppIntroSlider from 'react-native-app-intro-slider';
 console.disableYellowBox = true;
 
-import Landing from './views/Index';
-import Login from './views/Index';
-import Register from './views/Index';
+
+
+//screens
+import Landing from './views/Landing';
+import Login from './views/Login';
+import Register from './views/Register';
 import Home from './views/Index';
 import Search from './views/Search';
-import Orders from './views/Index';
 import Settings from './views/Settings';
 import Profile from './views/Profile';
 import Detail from './views/Detail';
+import Orders from './views/Orders';
 
 class AuthLoadingScreen extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      show_Main_App: true,
-    };
-  }
-
-  async getSlider() {
-    const slider = await AsyncStorage.getItem('slider');
-
-    if (JSON.parse(slider)) {
-      this.setState({
-        show_Main_App: true,
-      });
-      this.props.navigation.navigate('App');
-    } else {
-      this.setState({
-        show_Main_App: false,
-      });
-    }
-  }
-
-  on_Done_all_slides = () => {
-    this.setState({show_Main_App: true});
-    AsyncStorage.setItem('slider', JSON.stringify(true));
-    this.getSlider();
-  };
-
-  on_Skip_slides = () => {
-    this.setState({show_Main_App: true});
-    AsyncStorage.setItem('slider', JSON.stringify(true));
-    this.getSlider();
-  };
 
   componentDidMount() {
-    this.getSlider();
+    
+    if (Platform.OS === 'android') {
+      Linking.getInitialURL().then(url => {
+        this.navigate(url);
+      });
+    } else {
+      Linking.addEventListener('url', this.handleOpenURL);
+    }
+    this.props.navigation.navigate('Home');
+  }
+
+  componentWillUnmount() {
+    Linking.removeEventListener('url', this.handleOpenURL);
   }
 
   handleOpenURL = event => {
     this.navigate(event.url);
+  };
+
+  navigate = url => {
+    const {navigate} = this.props.navigation;
+
+    const route = url.replace(/.*?:\/\//g, '');
+    const id = route.match(/\/([^\/]+)\/?$/)[1];
+    const routeName = route.split('/')[0];
+    if (routeName === 'order') {
+      AsyncStorage.setItem('userOrderSelectedId', JSON.stringify(id));
+      navigate('Order');
+    }
   };
 
   render() {
@@ -75,16 +70,6 @@ class AuthLoadingScreen extends React.Component {
       'Require cycle: node_modules/rn-fetch-blob/index.js',
       'Require cycle: node_modules/react-native/Libraries/Network/fetch.js',
     ]);
-    if (this.state.show_Main_App == false) {
-      return (
-        <AppIntroSlider
-          slides={slides}
-          onDone={this.on_Done_all_slides}
-          showSkipButton={true}
-          onSkip={this.on_Skip_slides}
-        />
-      );
-    } else {
       return (
         <View
           style={{
@@ -116,105 +101,30 @@ class AuthLoadingScreen extends React.Component {
             }}>
             Waitrest.
           </Text>
-          {/* <ActivityIndicator  size="large" color="#000"/> */}
         </View>
       );
     }
   }
-}
 
-const styles = StyleSheet.create({
-  MainContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 20,
-  },
-  title: {
-    fontSize: 26,
-    color: '#fff',
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginTop: 20,
-  },
-  text: {
-    color: '#fff',
-    fontSize: 20,
-  },
-  title1: {
-    fontSize: 26,
-    color: '#000',
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginTop: 20,
-  },
-  text1: {
-    color: '#000',
-    fontSize: 20,
-  },
-  image: {
-    width: 200,
-    height: 200,
-    resizeMode: 'contain',
-  },
-});
-
-const slides = [
-  {
-    key: 'k1',
-    title: 'Welcome to Waitrest',
-    text: 'Your online restaurant platform',
-    image: {
-      uri: '',
-    },
-    titleStyle: styles.title,
-    textStyle: styles.text,
-    imageStyle: styles.image,
-    backgroundColor: '#212121',
-  },
-  {
-    key: 'k2',
-    title: 'Reserve a table',
-    text: 'Reserve a table in your desired restaurant.',
-    image: {
-      uri: '',
-    },
-    titleStyle: styles.title,
-    textStyle: styles.text,
-    imageStyle: styles.image,
-    backgroundColor: '#1565c0',
-  },
-  {
-    key: 'k3',
-    title: 'Order through Waitrest',
-    text: 'Order the entire menu via Waitrest.',
-    image: {
-      uri: '',
-    },
-    titleStyle: styles.title,
-    textStyle: styles.text,
-    imageStyle: styles.image,
-    backgroundColor: '#4caf50',
-  },
-];
-
-const Tab = createMaterialBottomTabNavigator();
+const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
 function HomeStack() {
   return (
     <Stack.Navigator
       headerMode="none"
+      
       screenOptions={{
         cardStyle: {backgroundColor: '#fff'},
         gestureEnabled: true,
         gestureDirection: "horizontal"
       }}>
-      <Stack.Screen name="Home" component={Home} />
-      <Stack.Screen name="Detail" component={Detail} />
+      <Stack.Screen name="Home" component={Home}/>
+      <Stack.Screen name="HomeDetail" component={Detail} />
     </Stack.Navigator>
   );
 }
+
 
 function SearchStack() {
   return (
@@ -225,20 +135,23 @@ function SearchStack() {
         gestureEnabled: true,
         gestureDirection: "horizontal"
       }}>
-      <Stack.Screen name="Search" component={Search} />
-      <Stack.Screen name="Detail" component={Detail} />
+      <Stack.Screen name="Search" component={Search}/>
+      <Stack.Screen name="SearchDetail" component={Detail} />
     </Stack.Navigator>
   );
 }
 
-function OrderStack() {
+function OrdersStack() {
   return (
     <Stack.Navigator
       headerMode="none"
       screenOptions={{
         cardStyle: {backgroundColor: '#fff'},
+        gestureEnabled: true,
+        gestureDirection: "horizontal"
       }}>
       <Stack.Screen name="Orders" component={Orders} />
+    
     </Stack.Navigator>
   );
 }
@@ -257,39 +170,25 @@ function ProfileStack() {
     </Stack.Navigator>
   );
 }
-function AuthStack() {
-  return (
-    <Stack.Navigator
-      headerMode="none"
-      screenOptions={{
-        cardStyle: {backgroundColor: '#fff'},
-        gestureEnabled: true,
-        gestureDirection: "horizontal"
-      }}>
-      <Stack.Screen name="Main" component={Landing} />
-      <Stack.Screen name="Login" component={Login} />
-      <Stack.Screen name="Register" component={Register} />
-    </Stack.Navigator>
-  );
-}
 
-function bottomNav() {
+
+
+
+function HomeTabs() {
   return (
-    <Tab.Navigator
-      initialRouteName="Home"
-      labeled={false}
-      activeColor="#000"
-      inactiveColor="#000000"
-      barStyle={{backgroundColor: '#fff', paddingBottom: 3}}
-      
-      >
-      <Tab.Screen
+    <Tab.Navigator headerMode="none" tabBarOptions= {{
+      showLabel: false,
+      style: {height:60}
+    }}>
+            <Tab.Screen
         name="Home"
         component={HomeStack}
         options={{
-          tabBarLabel: 'Home',
-          tabBarIcon: ({color, size}) =>
-            color == '#000' ? (
+          tabBarVisible: ( route  ) => 
+          route.name  == 'Loading' ?  (false) :  (alert('state'))
+          ,
+          tabBarIcon: ({ focused }) => 
+            focused ? (
               <Image
                 source={require('./assets/menu/home-solid.png')}
                 style={{width: 30, height: 30}}
@@ -302,13 +201,13 @@ function bottomNav() {
             ),
         }}
       />
+      
       <Tab.Screen
         name="Search"
         component={SearchStack}
-        options={{
-          tabBarLabel: 'Search',
-          tabBarIcon: ({color, size}) =>
-            color == '#000' ? (
+        options={{ 
+          tabBarIcon: ({ focused }) => 
+            focused ? (
               <Image
                 source={require('./assets/menu/search-solid.png')}
                 style={{width: 30, height: 30}}
@@ -323,11 +222,10 @@ function bottomNav() {
       />
       <Tab.Screen
         name="Orders"
-        component={OrderStack}
-        options={{
-          tabBarLabel: 'Orders',
-          tabBarIcon: ({color, size}) =>
-            color == '#000' ? (
+        component={OrdersStack}
+        options={{ 
+          tabBarIcon: ({ focused }) => 
+            focused ? (
               <Image
                 source={require('./assets/menu/search-solid.png')}
                 style={{width: 30, height: 30}}
@@ -345,8 +243,8 @@ function bottomNav() {
         component={ProfileStack}
         options={{
           tabBarLabel: 'Profile',
-          tabBarIcon: ({color, size}) =>
-            color == '#000' ? (
+          tabBarIcon: ({ focused }) => 
+            focused ? (
               <Image
                 source={require('./assets/menu/user-solid.png')}
                 style={{width: 30, height: 30}}
@@ -365,15 +263,17 @@ function bottomNav() {
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <Stack.Navigator headerMode="none" screenOptions={{
+<NavigationContainer>
+    <Stack.Navigator  headerMode="none"
+      screenOptions={{
         cardStyle: {backgroundColor: '#fff'},
-
-      }}>
-        <Stack.Screen name="SplashScreen" component={AuthLoadingScreen} />
-        <Stack.Screen name="Loading" component={AuthStack} />
-        <Stack.Screen name="App" component={bottomNav} />
-      </Stack.Navigator>
+      }} >
+        <Stack.Screen name="Welcome" component={AuthLoadingScreen} />
+      <Stack.Screen name="Home" component={HomeTabs} />
+      <Stack.Screen name="Loading" component={Landing} />
+      <Stack.Screen name="Login" component={Login} />
+      <Stack.Screen name="Register" component={Register} />
+    </Stack.Navigator>
     </NavigationContainer>
   );
 }

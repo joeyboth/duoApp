@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import {StyleSheet, TouchableOpacity, View, Text} from 'react-native'
 import Icon from 'react-native-vector-icons/Feather';
+import IconFont from 'react-native-vector-icons/FontAwesome5';
 
 export default class ButtonWithIcon extends Component{
     
@@ -8,7 +9,10 @@ export default class ButtonWithIcon extends Component{
 
         return(
           <TouchableOpacity style={styles.buttonContainer}
-          onPress={() => this.props.onPress}>
+          onPress={this.props.onPress}>
+            <View style={{position: 'absolute', top: 0, left: 15, right: 0, bottom: 0, justifyContent: 'center',width:30, alignItems:'center', textAlignVertical: 'center',zIndex:9999}}>
+            {this.props.iconType == 'Feather' ? <Icon name={this.props.icon} solid size={20} color={this.props.textColor} /> : <IconFont name={this.props.icon} solid size={20} color={this.props.textColor} />}
+            </View>
           <View
             style={[
               styles.button,
@@ -16,21 +20,14 @@ export default class ButtonWithIcon extends Component{
                 backgroundColor: this.props.backgroundColor,
                 flexDirection: 'row',
                 justifyContent: 'center',
+
               },
             ]}>
+ 
             <View
               style={{
-                justifyContent: 'flex-start',
-                flexDirection: 'row',
-                alignContent:'center',
-                alignItems:'center'
-              }}>
-             <Icon name={this.props.icon} size={20} color={this.props.textColor} />
-            </View>
-            <View
-              style={{
-                justifyContent: 'flex-start',
-                flexDirection: 'row',
+                justifyContent: 'center',
+                textAlign:'center'
               }}>
               <Text style={[{color: this.props.textColor}, styles.buttonText]}>
               {this.props.title}
@@ -46,8 +43,8 @@ export default class ButtonWithIcon extends Component{
 
 const styles = StyleSheet.create({
   buttonContainer: {
-    marginTop:15,
-    marginBottom:15,
+    marginTop:20,
+    marginBottom:20,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -59,8 +56,6 @@ const styles = StyleSheet.create({
   },
   button: {
     padding: 15,
-    paddingRight: 70,
-    paddingLeft: 70,
     borderRadius: 15,
   },
   buttonText: {

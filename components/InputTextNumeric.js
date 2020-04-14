@@ -26,6 +26,17 @@ export class InputTextNumeric extends Component {
     updateMasterState(attrName, updatedValue);
   };
 
+  showError() {
+    return this.props.error
+      ? this.props.error.map((data, i) => {
+          return (
+            <Text style={Styles.error}>{data}</Text>
+            );
+      
+        })
+      : null;
+  }
+
   render() {
     if (!this.state.value == '') {
       this.setState({isFieldActive: true});
@@ -51,6 +62,8 @@ export class InputTextNumeric extends Component {
             <Text style={Styles.subTitleStyles}>{this.props.subTitle}</Text>
           ) : null}
         </View>
+        {this.showError()}
+        <Text style={Styles.error}>{this.props.error}</Text>
         <View style={[Styles.container, {height: this.props.height}]}>
           <TextInput
             value={this.props.value}
@@ -67,7 +80,7 @@ export class InputTextNumeric extends Component {
             onChangeText={this._onChangeText}
             placeholder={this.props.title}
           />
-          <Text style={Styles.error}>{this.props.error}</Text>
+
         </View>
       </View>
     );
@@ -90,8 +103,8 @@ const Styles = StyleSheet.create({
   },
   error: {
     fontSize: 10,
-    marginTop: 5,
-    marginBottom: 5,
+    marginTop: 0,
+    marginBottom: 6,
     fontWeight: 'bold',
     color: 'red',
   },

@@ -26,13 +26,24 @@ export class InputText extends Component {
     updateMasterState(attrName, updatedValue);
   };
 
+  showError() {
+    return this.props.error
+      ? this.props.error.map((data, i) => {
+          return (
+            <Text style={Styles.error}>{data}</Text>
+            );
+      
+        })
+      : null;
+  }
+
   render() {
     if (!this.state.value == '') {
       this.setState({isFieldActive: true});
     }
+
     return (
       <View>
-        
         <View style={Styles.titlesContainer}>
           <View style={{flexDirection:'row', alignContent:'center', alignItems:'center'}}>
           <Text style={Styles.titleStyles}>{this.props.title}</Text>
@@ -51,6 +62,8 @@ export class InputText extends Component {
             <Text style={Styles.subTitleStyles}>{this.props.subTitle}</Text>
           ) : null}
         </View>
+        {this.showError()}
+        
         <View style={[Styles.container, {height: this.props.height}]}>
           <TextInput
             value={this.props.value}
@@ -61,12 +74,13 @@ export class InputText extends Component {
             numberOfLines={this.props.multicount}
             underlineColorAndroid="transparent"
             onFocus={this._handleFocus}
+            secureTextEntry={this.props.password}
             maxLength={this.props.length}
             onBlur={this._handleBlur}
             onChangeText={this._onChangeText}
-            placeholder={this.props.title}
+            //placeholder={this.props.title}
           />
-          <Text style={Styles.error}>{this.props.error}</Text>
+        
         </View>
       </View>
     );
@@ -89,8 +103,8 @@ const Styles = StyleSheet.create({
   },
   error: {
     fontSize: 10,
-    marginTop: 5,
-    marginBottom: 5,
+    marginTop: 0,
+    marginBottom: 6,
     fontWeight: 'bold',
     color: 'red',
   },

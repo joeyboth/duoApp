@@ -4,13 +4,9 @@ import {
   Animated,
   StatusBar,
   ScrollView,
-  View,
-  Text,
-  Image,
 } from 'react-native';
 import SafeAreaView from 'react-native-safe-area-view';
 import HeaderBack from '../components/HeaderBack';
-import {InputTextNumeric} from './../components/InputTextNumeric';
 import {InputText} from './../components/InputText';
 import Button from './../components/Button';
 import ModalAlert from './../components/ModalAlert';
@@ -55,7 +51,7 @@ export default class Profile extends Component {
   render() {
     return (
       <SafeAreaView style={{backgroundColor: '#fff'}}>
-        <HeaderBack
+          <HeaderBack
           scrollOffset={this.state.scrollOffset}
           title={'Mijn gegevens'}
           navigation={this.props.navigation}

@@ -30,6 +30,29 @@ export default class Settings extends Component {
 
   componentDidMount() {
     this.state.scrollOffset.addListener(({value}) => (this.offset = value));
+    this.checkIfUserIsLoggedIn();
+  }
+
+  _onRefresh(){
+
+  }
+
+  async checkIfUserIsLoggedIn() {
+    try {
+      let userToken = await AsyncStorage.getItem('userToken');
+      if (userToken) {
+
+      } else {
+        this.props.navigation.navigate('Loading', {
+          onGoBack: this._onRefresh,
+        });
+       
+      }
+    } catch (error) {
+      this.props.navigation.navigate('Loading', {
+        onGoBack: this._onRefresh,
+      });
+    }
   }
 
   onScroll = e => {
