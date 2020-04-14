@@ -21,7 +21,7 @@ class RestaurantsList extends React.Component {
       <View>
        <TouchableOpacity  onPress={() => {
                             AsyncStorage.setItem(this.props.navigationId, JSON.stringify(this.props.id));
-                            this.props.navigation.navigate(this.props.navigationName, { name: 'Detail' });
+                            this.props.navigation.navigate(this.props.navigationName, { name: 'Detail', title: this.props.title, image: this.props.image });
 
 
                         }}>

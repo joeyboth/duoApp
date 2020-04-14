@@ -7,7 +7,7 @@ export default class Button extends Component{
 
         return(
           <TouchableOpacity
-          style={styles.buttonContainer}
+          style={[styles.buttonContainer, {marginBottom: this.props.marginBottom ? this.props.marginBottom : 15,marginTop: this.props.marginTop ? this.props.marginTop : 15}]}
           onPress={this.props.onPress}>
           <View
             style={[
@@ -29,8 +29,6 @@ export default class Button extends Component{
 
 const styles = StyleSheet.create({
   buttonContainer: {
-    marginTop:15,
-    marginBottom:15,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,

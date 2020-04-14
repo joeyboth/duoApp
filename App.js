@@ -116,8 +116,8 @@ function HomeStack() {
       
       screenOptions={{
         cardStyle: {backgroundColor: '#fff'},
-        gestureEnabled: true,
-        gestureDirection: "horizontal"
+        // gestureEnabled: true,
+        // gestureDirection: "horizontal"
       }}>
       <Stack.Screen name="Home" component={Home}/>
       <Stack.Screen name="HomeDetail" component={Detail} />
@@ -132,8 +132,8 @@ function SearchStack() {
       headerMode="none"
       screenOptions={{
         cardStyle: {backgroundColor: '#fff'},
-        gestureEnabled: true,
-        gestureDirection: "horizontal"
+        // gestureEnabled: true,
+        // gestureDirection: "horizontal"
       }}>
       <Stack.Screen name="Search" component={Search}/>
       <Stack.Screen name="SearchDetail" component={Detail} />
@@ -147,8 +147,8 @@ function OrdersStack() {
       headerMode="none"
       screenOptions={{
         cardStyle: {backgroundColor: '#fff'},
-        gestureEnabled: true,
-        gestureDirection: "horizontal"
+        // gestureEnabled: true,
+        // gestureDirection: "horizontal"
       }}>
       <Stack.Screen name="Orders" component={Orders} />
     
@@ -162,8 +162,8 @@ function ProfileStack() {
       headerMode="none"
       screenOptions={{
         cardStyle: {backgroundColor: '#fff'},
-        gestureEnabled: true,
-        gestureDirection: "horizontal"
+        // gestureEnabled: true,
+        // gestureDirection: "horizontal"
       }}>
       <Stack.Screen name="Settings" component={Settings} />
       <Stack.Screen name="Profile" component={Profile} />
@@ -227,12 +227,12 @@ function HomeTabs() {
           tabBarIcon: ({ focused }) => 
             focused ? (
               <Image
-                source={require('./assets/menu/search-solid.png')}
+                source={require('./assets/menu/list-regular.png')}
                 style={{width: 30, height: 30}}
               />
             ) : (
               <Image
-                source={require('./assets/menu/search-regular.png')}
+                source={require('./assets/menu/list-regular.png')}
                 style={{width: 30, height: 30}}
               />
             ),

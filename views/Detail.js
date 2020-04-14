@@ -53,6 +53,10 @@ export default class Detail extends Component {
   }
 
   render() {
+    const { route } = this.props;
+
+    const { title } = route.params;
+    const { image } = route.params;
     return (
       <SafeAreaView style={{backgroundColor: '#fff'}}>
         <HeaderBack
@@ -77,7 +81,7 @@ export default class Detail extends Component {
               style={styles.coverImage}
               source={{
                 uri:
-                  'https://media-cdn.tripadvisor.com/media/photo-s/12/c1/c3/f5/restaurant-araz.jpg',
+                  image,
               }}
             />
 
@@ -91,7 +95,7 @@ export default class Detail extends Component {
                 style={styles.avatarImage}
                 source={{
                   uri:
-                    'https://media-cdn.tripadvisor.com/media/photo-s/12/c1/c3/f5/restaurant-araz.jpg',
+                    image,
                 }}
               />
               <View style={styles.detailsContentRowProfile}>
@@ -104,7 +108,7 @@ export default class Detail extends Component {
                       color: '#000',
                       textAlign: 'center',
                     }}>
-                    Het cafétje
+                    {title}
                   </Text>
                 </View>
               </View>

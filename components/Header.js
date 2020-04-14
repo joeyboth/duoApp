@@ -18,24 +18,25 @@ export default class Header extends Component{
                 outputRange: [80, 60],
                 extrapolate: 'clamp',
               }),
-              shadowColor: '#000',
-              shadowOffset: {
-                width: 0,
-                height: 4,
-              },
-              shadowOpacity: 0.3,
-              shadowRadius: 4.65,
+              // shadowColor: '#000',
+              // shadowOffset: {
+              //   width: 0,
+              //   height: 4,
+              // },
+              // shadowOpacity: 0.3,
+              // shadowRadius: 4.65,
 
-              elevation: scrollOffset.interpolate({
-                inputRange: [0, 200],
-                outputRange: [0, 8],
-                extrapolate: 'clamp',
-              }),
+              // elevation: scrollOffset.interpolate({
+              //   inputRange: [0, 200],
+              //   outputRange: [0, 8],
+              //   extrapolate: 'clamp',
+              // }),
             },
           ]}>
           <Animated.Text
             style={{
               fontWeight: 'bold',
+              marginBottom:3,
               fontSize: scrollOffset.interpolate({
                 inputRange: [0, 200],
                 outputRange: [30, 25],
