@@ -122,7 +122,7 @@ export default class Login extends Component {
             'userToken',
             JSON.stringify(response.data.access_token),
           );
-          this.props.navigation.navigate('App');
+          this.props.navigation.navigate('Home');
         })
         .catch(error => {
           this.setState({

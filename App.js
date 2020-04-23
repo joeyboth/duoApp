@@ -28,6 +28,7 @@ import Settings from './views/Settings';
 import Profile from './views/Profile';
 import Detail from './views/Detail';
 import Orders from './views/Orders';
+import Order from './views/Order';
 
 class AuthLoadingScreen extends React.Component {
 
@@ -151,7 +152,7 @@ function OrdersStack() {
         // gestureDirection: "horizontal"
       }}>
       <Stack.Screen name="Orders" component={Orders} />
-    
+      <Stack.Screen name="Order" component={Order} />
     </Stack.Navigator>
   );
 }

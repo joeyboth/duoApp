@@ -98,6 +98,8 @@ export default class Register extends Component {
       data: {
         name: this.state.name,
         email: this.state.email,
+        username: 'Testerrrr4',
+        gender:1,
         password: this.state.password,
         password_confirmation: this.state.passwordConfirmation,
       },
@@ -110,7 +112,7 @@ export default class Register extends Component {
           'userToken',
           JSON.stringify(response.data.access_token),
         );
-        this.props.navigation.navigate('App');
+        this.props.navigation.navigate('Home');
       })
       .catch(error => {
         console.log(error.response.data);

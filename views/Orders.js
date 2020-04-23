@@ -5,6 +5,7 @@ import Header from '../components/Header';
 import SelectContainerButtons from '../components/SelectContainerButtons';
 import Empty from '../components/Empty';
 import LoadingOrdersFooter from '../components/LoadingOrdersFooter';
+import axios from 'axios';
 var screen = Dimensions.get('window');
 
 export default class Orders extends Component {
@@ -24,13 +25,37 @@ export default class Orders extends Component {
       showNonActive: false,
       nonActiveOrders:[],
       activeOrders:[
-        {order_id: 1,order_status:1, order_image: 'https://media-cdn.tripadvisor.com/media/photo-s/12/c1/c3/f5/restaurant-araz.jpg'},
+        {id: 1,status:1, image: 'https://media-cdn.tripadvisor.com/media/photo-s/12/c1/c3/f5/restaurant-araz.jpg'},
       ],
       pageNonActive: 1,
       pageActive:1
      
     };
   }
+
+  getDetails = async () => {
+    const userToken = await AsyncStorage.getItem('userToken');
+    const newToken = 'Bearer ' + JSON.parse(userToken);
+    axios({
+      method: 'get',
+      url: 'https://api.retrii.com/api/waitrest/all',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        Authorization: newToken,
+      },
+    })
+      .then((response) => {
+        console.log(response);
+        this.setState({activeOrders: response.data});
+
+      })
+      .catch((error) => {
+        // handle error
+        console.log(error.response);
+      
+      });
+  };
 
   getActiveOrders() {
     this.setState({
@@ -48,6 +73,7 @@ export default class Orders extends Component {
 
   componentDidMount() {
     this.state.scrollOffset.addListener(({value}) => (this.offset = value));
+    this.getDetails()
   }
 
   onScroll = e => {
@@ -77,11 +103,11 @@ export default class Orders extends Component {
     } else if (status == 2) {
       return <Text style={{fontWeight: 'bold'}}>Is betaald</Text>;
     } else if (status == 3) {
-      return <Text style={{fontWeight: 'bold'}}>Is verzonden</Text>;
+      return <Text style={{fontWeight: 'bold'}}>Is bezig</Text>;
     } else if (status == 4) {
       return <Text style={{fontWeight: 'bold'}}>Is geannuleerd</Text>;
     } else if (status == 5) {
-      return <Text style={{fontWeight: 'bold'}}>Is ontvangen</Text>;
+      return <Text style={{fontWeight: 'bold'}}>Is voldaan</Text>;
     } else {
       return <Text style={{fontWeight: 'bold'}}>...</Text>;
     }
@@ -134,11 +160,94 @@ export default class Orders extends Component {
               renderItem={({item}) => (
                 <TouchableOpacity
                   onPress={() => {
-                    AsyncStorage.setItem(
-                      'userOrderSelectedId',
-                      JSON.stringify(item.order_id),
-                    );
-                    this.props.navigation.navigate('Order');
+                    this.props.navigation.navigate('Order',{
+                      name: 'Cafétje',
+                      persons: 4,
+                      id: 1,
+                      categories:[
+                        {
+                          id:1,
+                          name: 'Hoofdmenu'
+                        },
+                        {
+                          id:2,
+                          name: 'Soepen'
+                        },
+                        {
+                          id:3,
+                          name: 'Visgerechten'
+                        },
+                        {
+                          id:4,
+                          name: 'Vleesgerechten'
+                        },
+                        {
+                          id:5,
+                          name: 'Snacks'
+                        },
+                        {
+                          id:6,
+                          name: 'Ijsjes'
+                        },],
+                        products:[
+                          {
+                            id:1,
+                            category:1,
+                            name: 'Vleesnogwat',
+                            price: 15.29,
+                            image: 'https://www.joorkitchen.nl/wp-content/uploads/2019/03/gevulde-paprika-BK-6-van-17.jpg'
+                          },
+                          {
+                            id:2,
+                            category:1,
+                            name: 'Pizza',
+                            price: 13.29,
+                            image: 'https://www.joorkitchen.nl/wp-content/uploads/2019/03/gevulde-paprika-BK-6-van-17.jpg'
+                          },
+                          {
+                            id:3,
+                            category:1,
+                            name: 'Friet',
+                            price: 12.00,
+                            image: 'https://www.joorkitchen.nl/wp-content/uploads/2019/03/gevulde-paprika-BK-6-van-17.jpg'
+                          },
+                          {
+                            id:4,
+                            category:2,
+                            name: 'Tomatensoep',
+                            price: 5.00,
+                            image: 'https://www.joorkitchen.nl/wp-content/uploads/2019/03/gevulde-paprika-BK-6-van-17.jpg'
+                          },
+                          {
+                            id:5,
+                            category:2,
+                            name: 'Groentensoep',
+                            price: 5.00,
+                            image: 'https://www.joorkitchen.nl/wp-content/uploads/2019/03/gevulde-paprika-BK-6-van-17.jpg'
+                          },
+                          {
+                            id:6,
+                            category:3,
+                            name: 'Zwaardvis',
+                            price: 25.99,
+                            image: 'https://www.joorkitchen.nl/wp-content/uploads/2019/03/gevulde-paprika-BK-6-van-17.jpg'
+                          },
+                          {
+                            id:7,
+                            category:5,
+                            name: 'Biefstuk',
+                            price: 20.99,
+                            image: 'https://www.joorkitchen.nl/wp-content/uploads/2019/03/gevulde-paprika-BK-6-van-17.jpg'
+                          },
+                          {
+                            id:8,
+                            category:5,
+                            name: 'Varkenshaasje',
+                            price: 20.99,
+                            image: 'https://www.joorkitchen.nl/wp-content/uploads/2019/03/gevulde-paprika-BK-6-van-17.jpg'
+                          },]
+
+                    });
                   }}>
                   <Animated.View style={styles.containerNotification}>
                     <View
@@ -149,7 +258,7 @@ export default class Orders extends Component {
                       }}>
                       <Image
                         style={styles.userProfile}
-                        source={{uri: item.order_image}}
+                        source={{uri: item.image}}
                       />
                     </View>
                     <View
@@ -160,10 +269,10 @@ export default class Orders extends Component {
                         justifyContent: 'center',
                       }}>
                       <Text numberOfLines={1} style={styles.orderId}>
-                        #{item.order_id}
+                        Het cafétje #{item.id}
                       </Text>
                       <Text numberOfLines={1} style={styles.messageRead}>
-                        Status: {this.showStatus(item.order_status)}
+                        Status: {this.showStatus(item.status)}
                       </Text>
                     </View>
                   </Animated.View>
@@ -197,7 +306,7 @@ export default class Orders extends Component {
                   onPress={() => {
                     AsyncStorage.setItem(
                       'userOrderSelectedId',
-                      JSON.stringify(item.order_id),
+                      JSON.stringify(item.id),
                     );
                     this.props.navigation.navigate('Order');
                   }}>
@@ -208,7 +317,7 @@ export default class Orders extends Component {
                       right: 0,
                       zIndex: 999,
                     }}>
-                    {this.showPriceLabel(item.order_status, item.order_price)}
+                    {this.showPriceLabel(item.status, item.order_price)}
                   </View>
                   <Animated.View style={styles.containerNotification}>
                     <View
@@ -219,7 +328,7 @@ export default class Orders extends Component {
                       }}>
                       <Image
                         style={styles.userProfile}
-                        source={{uri: item.order_image}}
+                        source={{uri: item.image}}
                       />
                     </View>
                     <View
@@ -230,10 +339,10 @@ export default class Orders extends Component {
                         justifyContent: 'center',
                       }}>
                       <Text numberOfLines={1} style={styles.orderId}>
-                        #{item.order_id}
+                        #{item.id}
                       </Text>
                       <Text numberOfLines={1} style={styles.messageRead}>
-                        Status: {this.showStatus(item.order_status)}
+                        Status: {this.showStatus(item.status)}
                       </Text>
                     </View>
                   </Animated.View>

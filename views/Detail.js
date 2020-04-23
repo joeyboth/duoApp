@@ -6,8 +6,10 @@ import {
   ScrollView,
   View,
   Text,
+  AsyncStorage,
   Image,
 } from 'react-native';
+import axios from 'axios';
 import SafeAreaView from 'react-native-safe-area-view';
 import HeaderBack from '../components/HeaderBack';
 import {InputTextNumeric} from './../components/InputTextNumeric';
@@ -34,6 +36,41 @@ export default class Detail extends Component {
     };
   }
 
+  reservation = async () => {
+    this.setState({
+      loadingButton: true,
+      zipcodeError: '',
+      addressError: '',
+      addressNrError: '',
+      cityError: '',
+    });
+    const userToken = await AsyncStorage.getItem('userToken');
+    const newToken = 'Bearer ' + JSON.parse(userToken);
+    axios({
+      method: 'post',
+      url: 'https://api.retrii.com/api/waitrest/add',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        Authorization: newToken,
+      },
+      data: {
+        persons: this.state.persons,
+        restaurant: 1
+      },
+    })
+      .then((response) => {
+        console.log(response);
+        this.setState({modal: true});
+
+      })
+      .catch((error) => {
+        // handle error
+        console.log(error.response);
+      
+      });
+  };
+
   _updateMasterState = (attrName, value) => {
     this.setState({[attrName]: value});
   };
@@ -47,10 +84,6 @@ export default class Detail extends Component {
     const offset = e.nativeEvent.contentOffset.y / scrollSensitivity;
     this.state.scrollOffset.setValue(offset);
   };
-
-  reservation() {
-    this.setState({modal: true});
-  }
 
   render() {
     const { route } = this.props;
